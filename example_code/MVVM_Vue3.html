@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proxy Demo</title>
+</head>
+<body>
+<!-- 输入框和按钮 -->
+<div>
+    <!-- 定义一个输入框 -->
+    <input type="text" id="input" />
+    <!-- button 被触发时执行onclick定义的js语句，此处为设置vm.text为'Hello World' -->
+    <button onclick="vm.text = 'Hello World'">设置为 Hello World</button>
+</div>
+<!-- 输入框和按钮 -->
+
+<!-- 文本展示 -->
+<div id="output"></div>
+<!-- 文本展示 -->
+
+<script>
+    // 声明一个响应式数据
+    // vm对象为Proxy的实例，Vue3 中使用 Proxy 方法来实现响应式数据
+    // Proxy: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+    const vm = new Proxy(
+        {},
+        {
+            // set 方法用来拦截 vm 对象的赋值操作，value是给vm赋值的值，key是赋值给vm的哪个属性，该实例代码中为text
+            set(obj, key, value) {
+                document.querySelector('#input').value = value
+                document.querySelector('#output').innerText = value
+            },
+        }
+    )
+
+    // 处理输入行为
+    // oninput方法会在<input>被输入时触发，将vm的text属性的值设置为<input>输入的值
+    document.querySelector('#input').oninput = function (e) {
+        vm.text = e.target.value
+    }
+</script>
+</body>
+</html>
